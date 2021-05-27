@@ -1,0 +1,6 @@
+{
+    "python.linting.pylintEnabled": true,
+    "python.pythonPath": "venv\\Scripts\\python.exe",
+    "python.formatting.provider": "yapf",
+    "python.linting.enabled": false
+}

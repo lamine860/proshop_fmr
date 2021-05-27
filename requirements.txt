@@ -1,7 +1,17 @@
+astroid==2.5.6
 click==8.0.1
 colorama==0.4.4
 Flask==2.0.1
+isort==5.8.0
 itsdangerous==2.0.1
 Jinja2==3.0.1
+lazy-object-proxy==1.6.0
 MarkupSafe==2.0.1
+mccabe==0.6.1
+-e git+git@github.com:lamine860/proshop_fmr.git@7790eb2475a11db9d132a7fa3a7fb3dddbffe8d2#egg=proshop_fmr
+pylint==2.8.2
+python-dotenv==0.17.1
+toml==0.10.2
 Werkzeug==2.0.1
+wrapt==1.12.1
+yapf==0.31.0

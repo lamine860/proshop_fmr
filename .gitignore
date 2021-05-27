@@ -1,1 +1,6 @@
-venv
+venv/
+.env
+*.pyc
+__pycache__/
+ proshop_fmr.egg-info/
+ .vscode/
