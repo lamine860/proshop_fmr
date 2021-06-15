@@ -2,31 +2,36 @@ import os
 
 
 class Config(object):
-    DEBUG = False
+    DEBUG = True
     TESTING = False
-    SQLALCHEMY_TRACK_MODIFICATIONS = False
-    TWITTER_OAUTH_CLIENT_SECRET = os.environ.get("TWITTER_OAUTH_CLIENT_SECRET")
-    MAIL_SERVER = 'smtp.gmail.com'
-    MAIL_PORT = 465
-    MAIL_USE_TLS = False
-    MAIL_USE_SSL = True
-    MAIL_USERNAME = os.environ.get("MAIL_USERNAME")
-    MAIL_PASSWORD = os.environ.get("MAIL_PASSWORD")
+    SECRET_KEY = "secret"
     MONGODB_SETTINGS = {
-        'db': 'proshop_fmr',
-        'host': 'localhost',
-        'port': 27017
+        'db': os.environ.get('DB_NAME', 'proshop_fmr'),
+        'host': os.environ.get('DB_HOST', 'localhost'),
+        'port': os.environ.get('DB_PORT'),
     }
 
 
 class ProductionConfig(Config):
     DEBUG = False
-    SECRET_KEY = "9asdf8980as8df9809sf6a6ds4f3435fa64ˆGggd76HSD57hsˆSDnb"
-    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SECRET_KEY = os.environ.get(
+        'SECRET_KEY', "9asdf8980as8df9809sf6a6ds4f3435fa64ˆGggd76HSD57hsˆSDnb")
+    MONGODB_SETTINGS = {
+        'db': os.environ.get('DB_NAME', 'proshop_fmr'),
+        'host': os.environ.get('DB_HOST'),
+        'port': os.environ.get('DB_PORT'),
+    }
 
 
 class DevelopmentConfig(Config):
-    ENV = "development"
-    DEVELOPMENT = True
-    SECRET_KEY = "secret_for_test_environment"
-    OAUTHLIB_INSECURE_TRANSPORT = True
+    DEBUG = True
+
+
+class TestingConfig(Config):
+    DEBUG = True
+    TESTING = True
+    MONGODB_SETTINGS = {
+        'db': os.environ.get('DB_NAME', 'proshop_fmr_test'),
+        'host': os.environ.get('DB_HOST', 'localhost'),
+        'port': os.environ.get('DB_PORT'),
+    }

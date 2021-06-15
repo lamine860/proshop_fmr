@@ -1,4 +1,5 @@
 """ Api views for products """
+from bson.objectid import ObjectId
 from flask import Blueprint, jsonify
 from proshop_fmr.models import Product
 
@@ -14,15 +15,18 @@ def list_index():
     return jsonify(Product.objects)
 
 
-@product_bp.route('/<string:product_name>')
-def show(product_name):
+@product_bp.route('/<product_id>')
+def show(product_id):
     """
-    GET /api/product/product_name
+    GET /api/product/product_id
     return Product
     """
-    product = Product.objects(name=product_name).first()
+    if not ObjectId.is_valid(product_id):
+        error_msg = {'message': f'Product not found for ({product_id})'}
+        return error_msg, 404
+    product = Product.objects.get(pk=product_id)
     if not product:
-        error_msg = {'message': f'Product not found for ({product_name})'}
+        error_msg = {'message': f'Product not found for ({product_id})'}
         return error_msg, 404
     return jsonify(product)
 
@@ -40,7 +44,9 @@ def insertMany():
         price=89.99,
         countInStock=3,
         rating=4,
-        numReviews=123)
+        numReviews=123,
+        quantity=10
+        )
     product1.save()
 
     product2 = Product(
@@ -54,6 +60,7 @@ def insertMany():
         countInStock=10,
         rating=3,
         numReviews=512,
+        quantity=10
     )
     product2.save()
 
@@ -68,6 +75,7 @@ def insertMany():
         countInStock=0,
         rating=0,
         numReviews=0,
+        quantity=15,
     )
     product3.save()
     product4 = Product(
@@ -81,6 +89,7 @@ def insertMany():
         countInStock=10,
         rating=0,
         numReviews=0,
+        quantity=12,
     )
     product4.save()
 
@@ -94,7 +103,9 @@ def insertMany():
         price=49.99,
         countInStock=7,
         rating=0,
-        numReviews=0)
+        numReviews=0,
+        quantity=14,
+        )
     product5.save()
     product6 = Product(
         name='Amazon Echo Dot 3rd Generation',

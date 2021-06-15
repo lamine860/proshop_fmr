@@ -1,22 +1,18 @@
 """ Application entry point """
+from flask import Flask
+from flask_mongoengine import MongoEngine
+from flask_bcrypt import Bcrypt
 
-from .proshop_fmr import create_app
-import jsonschema
-from mongoengine.errors import ValidationError
+from .config import DevelopmentConfig as Config
+from .views.products import product_bp
+from .views.user import user_bp
 
-app = create_app()
+app = Flask(__name__)
+app.config.from_object(Config)
+MongoEngine(app)
 
-
-@app.errorhandler( jsonschema.ValidationError )
-def onValidationError( e ):
-    return {'message': e.message }, 400 
-
-@app.errorhandler( ValidationError )
-def onValidationError( e ):
-    return {'message': e.message }, 400 
-
-
-
+app.register_blueprint(product_bp)
+app.register_blueprint(user_bp)
 
 if __name__ == '__main__':
     app.run()
