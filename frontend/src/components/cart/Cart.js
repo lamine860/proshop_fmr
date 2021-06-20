@@ -1,20 +1,30 @@
 import { useContext, useEffect, useState } from "react";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link, useHistory, useLocation, useParams } from "react-router-dom";
 import axios from "axios";
 import CartContext from "../../context/CartContext";
 import { ADD_TO_CART, CLEAR_CART } from "../../constants/cart";
 import Container from "../common/Container";
 import Alert from "../common/Alert";
 import CartItem from "./cartItem";
+import userContext from "../../context/UserContext";
 
-const Cart = ({ history }) => {
+const Cart = () => {
   const { state, dispatch } = useContext(CartContext);
+  const { state: userState } = useContext(userContext);
   const { cartItems } = state;
   const [cartItemCount, setCartItemCount] = useState(null);
+  const [total, setTotal] = useState(null);
   const { product_id } = useParams();
+  const history = useHistory()
   const search = useLocation().search.split("=");
   const qty = search.length > 1 ? parseInt(search[1]) : null;
-  const handlerClearCart = () => dispatch({type: CLEAR_CART})
+  const handlerClearCart = () => dispatch({ type: CLEAR_CART });
+  const handleProccessToCheckout = () => {
+    const to = userState.userInfo ? "/shipping" : "/login"
+    history.push(to);
+
+  }
+
   useEffect(() => {
     const handleProductParam = async () => {
       try {
@@ -39,6 +49,11 @@ const Cart = ({ history }) => {
       history.push("/cart");
     }
     setCartItemCount(cartItems.reduce((acc, item) => (acc += item.qty), 0));
+    setTotal(
+      cartItems
+        .reduce((acc, item) => (acc += item.qty * item.price), 0)
+        .toFixed(2)
+    );
   }, [qty, dispatch, product_id, cartItems, history]);
 
   return (
@@ -55,7 +70,10 @@ const Cart = ({ history }) => {
           ) : (
             <div>
               <div className="text-right">
-                <button className="bg-yellow-600 p-2 text-white rounded-md focus:outline-none" onClick={handlerClearCart}>
+                <button
+                  className="bg-yellow-600 p-2 text-white rounded-md focus:outline-none"
+                  onClick={handlerClearCart}
+                >
                   Empty the card
                 </button>
               </div>
@@ -72,13 +90,18 @@ const Cart = ({ history }) => {
             </div>
           )}
         </div>
-        <div className="border-2 p-4 rounded-md">
-          <div className="text-xl">{cartItemCount} Items</div>
-          <div>Total: $456</div>
-          <button className="bg-yellow-600 p-2 text-gray-50 w-full mt-4 rounded hover:bg-yellow-500">
-            Proceed to checkout
-          </button>
-        </div>
+        {total ? (
+          <div className="border-2 p-4 rounded-md h-44">
+            <div className="text-xl">{cartItemCount} Items</div>
+            <div>Total: {total}</div>
+            <button
+              className="bg-yellow-600 p-2 text-gray-50 w-full mt-4 rounded hover:bg-yellow-500 focus:outline-none"
+              onClick={() => handleProccessToCheckout()}
+            >
+              Proceed to checkout
+            </button>
+          </div>
+        ) : null}
       </div>
     </Container>
   );

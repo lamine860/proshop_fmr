@@ -13,7 +13,7 @@ export const productsReducer = (
 };
 
 
-export const productReducer = (
+export const productDetailReducer = (
   state = { product: {}, loading: true },
   action
 ) => {

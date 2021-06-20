@@ -8,7 +8,6 @@ const CartPage = (props) => {
   let fromStorage = localStorage.getItem("cartItems")
   ? JSON.parse(localStorage.getItem("cartItems"))
   : []
-  console.log(fromStorage)
   const cart = {
     cartItems: fromStorage
   };

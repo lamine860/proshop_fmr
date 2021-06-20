@@ -38,9 +38,14 @@ export const cartReducer = (state = { cartItems: [] }, action) => {
     case cartConstants.CLEAR_CART:
       localStorage.removeItem("cartItems");
       return {
-      ...state,
+        ...state,
         cartItems: [],
       };
+    case cartConstants.SAVE_PAYMENT_METHOD:
+      return { ...state, paymentMethod: action.payload };
+    case cartConstants.SAVE_SHIPPING_ADDRESS:
+      return { ...state, shippingAddress: action.payload };
+
     default:
       return state;
   }
